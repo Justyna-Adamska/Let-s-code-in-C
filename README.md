@@ -6,3 +6,6 @@ This repository is intended to serve as a tool for learning C language. Through 
 
 I started with a single main function that prints values of linear function. I also added for loop in order to simplify my code.
 
+### .gitignore
+
+In order to avoid commiting .swp and .out files I added .gitignore to my repository.
