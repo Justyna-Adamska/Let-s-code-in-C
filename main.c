@@ -1,21 +1,14 @@
 #include <stdio.h>
 
-/*function linear_2_param that prints function f(x)=ax+b with given parameter a and b, e.g f(x)=2x+5*/
-
 void linear_2_param (int a, int b) {
-
-
 		
 	printf("Your function now looks like this: f(x)=%dx + %d\n",a,b); 
-
 
 return;
 
 }
 
-void linear_range (int a, int b) { /*by coincidence same names as in line 5 - they are parameters of another function*/
-
-//fuction is of void type, it prints values of the range <a,b>//
+void linear_range (int a, int b) { 
 
 	printf("Values f(x) for the range <%d, %d>:\n", a,b);
 
@@ -27,48 +20,70 @@ int linear_values (int a, int x, int b){
 
 	int result = a*x+b;
 	
-
-
 return result;
 
 }
 
-//function that prints formula for the linear function //
+int init_x (int lower, int upper, int step,int* x) {
 
-void edit_function (int a, int x, int b){
+	int i;
+	int count;
+	count = 0;
+	for (i=lower; i<=upper; i+=step) {//or i=i+step
+	
+	*x=i;
+	x++;	
+        count++;
+}
+return count;
+}
 
-	int wynik = linear_values (a,x,b);
+void calc_values(int a, int b,int* x,int* y, int n_elem){
 
-	printf("f(%d)=%d\n", x, wynik);
 
+
+	for(int i=0;i<n_elem;++i){
+
+	*y = linear_values (a,*x,b);
+	++x;
+	printf("%d\n",*y);
+	++y;
+	}
+
+}
+
+void print_values(int* x,int* y, int n_elem){
+
+	for(int i=0; i<n_elem; ++i){
+
+	printf("f(%d) = %d\n", *x, *y);
+	x++;
+	y++;
+}
 return;
 
 }
-
-void function_loop (int a, int b, int lower, int upper) {
-
-//function that repeats edit_funciton as many times as given rage requires//
-	int x;
-
-	for (x=lower; x<=upper; ++x) {
-
-	edit_function(a,x,b);
-
-}
-
-return;
-}
-
-//function main only calls functions with given arguments - all operations are made within the functions//
+#define LOWER 0  //defining symbolic constants LOWER and UPPER and A and B
+#define UPPER 99
+#define A 2
+#define B 6
 
 int main (){
+//declaring two arrays x and y of size 100 per each
 
-	linear_2_param (2,6);
+int x[100];
+int y[100]; 
+//calling function init_x(lower,upper,step,x) that initializes array x
+	int n_elem;
 
-	linear_range (0,2);
+	n_elem = init_x (LOWER,UPPER,1,x);
+
+	linear_2_param (A,B);
+
+	linear_range (LOWER,UPPER);
 	
-	linear_values(2,0,6);
-	
-	function_loop (2,6,0,2);	
+	calc_values(A,B,x,y,n_elem);
+        print_values(x,y,n_elem);
+
 return 0;
 }
