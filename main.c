@@ -38,7 +38,7 @@ int init_x (int lower, int upper, int step,int* x) {
 return count;
 }
 
-void calc_values(int a, int b,int* x,int* y, int n_elem){
+void calc_values(int a, int b,const int* x,int* y, int n_elem){
 
 
 
@@ -52,7 +52,7 @@ void calc_values(int a, int b,int* x,int* y, int n_elem){
 
 }
 
-void print_values(int* x,int* y, int n_elem){
+void print_values(const int* x,const int* y, int n_elem){
 
 	for(int i=0; i<n_elem; ++i){
 

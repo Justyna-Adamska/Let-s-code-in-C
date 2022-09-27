@@ -17,3 +17,7 @@ I altered main.c file in such a way, that all operations and calculations are ma
 ## 27.09.2022
 
 I made some more changes to main.c file so that I use the concept of arrays and pointers. First I created two arrays and then I used for loops to initialize them. In the end I printed my results. In order to avoid magic numbers (values that say nothing to future user of the program), I introduced symbolic constants into my code.
+
+### const int
+
+In order to secure the code from unwanted modifications I added const int prefix to functions declarations. By doing it I explicitly show which values are open for modifications and which are not. 
