@@ -1,5 +1,6 @@
 #include <stdio.h>
-
+#include <stdlib.h>
+#include <errno.h>
 void linear_2_param (int a, int b) {
 		
 	printf("Your function now looks like this: f(x)=%dx + %d\n",a,b); 
@@ -24,16 +25,54 @@ return result;
 
 }
 
-int init_x (int lower, int upper, int step,int* x) {
+int init_x (int lower, int upper, int step,int** x) {
 
+	
 	int i;
 	int count;
-	count = 0;
+	
+	count = 0; 
+#if 0
+/* 1st version  */
+	*x= malloc(10*sizeof(int));
+
 	for (i=lower; i<=upper; i+=step) {//or i=i+step
 	
-	*x=i;
-	x++;	
+//	(*x)[count]=i;
+	*((*x)+i)=i;
+	printf("%d\n",(*x)[count]);
+
+
+	
         count++;
+}
+
+#endif
+
+int *tmp = malloc(10 * sizeof(int));
+//important assign x before we increment tmp
+*x= tmp;
+	for (i=lower; i<=upper; i+=step) {//or i=i+step
+	
+	*tmp=i;
+        tmp++;
+        count++;
+
+	if (count>=10){
+
+	tmp = realloc (*x, ((count+1)*sizeof(int)));
+        tmp=NULL;
+if (tmp == NULL){
+	printf("Not enough memory - exiting...");
+
+	return -ENOMEM;
+	
+}
+	*x = tmp;
+	tmp +=count;
+}
+	
+
 }
 return count;
 }
@@ -46,7 +85,7 @@ void calc_values(int a, int b,const int* x,int* y, int n_elem){
 
 	*y = linear_values (a,*x,b);
 	++x;
-	printf("%d\n",*y);
+
 	++y;
 	}
 
@@ -63,27 +102,91 @@ void print_values(const int* x,const int* y, int n_elem){
 return;
 
 }
-#define LOWER 0  //defining symbolic constants LOWER and UPPER and A and B
-#define UPPER 99
+
+
+int input (int* lower, int* upper, int* step){
+
+	int c;
+
+	printf("Give the lower end of the range: \n");
+	c = scanf("%d",lower);
+	
+	if (c != 1) 
+
+{	printf("Wrong input data...\n");
+
+	return 1;
+}
+
+		
+	printf("Give the upper end of the range: \n");
+
+	scanf("%d", upper);
+
+	printf("Give the value of the step: \n");
+
+	scanf("%d", step);
+
+
+return 0;
+}
+
 #define A 2
 #define B 6
 
 int main (){
 //declaring two arrays x and y of size 100 per each
 
-int x[100];
-int y[100]; 
-//calling function init_x(lower,upper,step,x) that initializes array x
-	int n_elem;
+int *x;
+int lower;
+int upper;
+int step;
+int input_res;
 
-	n_elem = init_x (LOWER,UPPER,1,x);
+	int n_elem;
+	
+	
+input_res = input(&lower,&upper,&step);
+
+if (input_res == 1){
+
+return 0;
+
+}
+
+if (lower>upper || step>(upper - lower)){
+
+printf("Wrong values - exiting...\n");
+return 0;
+
+}
+#if 0   // - command that makes the preprocessor ignore every line until endif
+printf("lower:%d\n",lower);
+printf("upper:%d\n",upper);
+printf("step:%d\n", step);
+#endif
+	n_elem = init_x (lower,upper,step,&x);
+
+	if (n_elem ==-ENOMEM){
+	printf("exiting...");	
+	return 1;
+
+}
+int *y = (int*)malloc(10*sizeof(int));
+if (y==NULL)             //if y is null pointer AKA there's not enough space for y on the heap, then free(x) and exit as we need space for both array x and y
+{
+free(x);
+printf("Not sufficient memory.exiting\n");
+return -ENOMEM;
+}
 
 	linear_2_param (A,B);
 
-	linear_range (LOWER,UPPER);
+	linear_range (lower,upper);
 	
 	calc_values(A,B,x,y,n_elem);
         print_values(x,y,n_elem);
-
+free(x);
+free(y);
 return 0;
 }

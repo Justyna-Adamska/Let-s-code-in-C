@@ -21,3 +21,24 @@ I made some more changes to main.c file so that I use the concept of arrays and 
 ### const int
 
 In order to secure the code from unwanted modifications I added const int prefix to functions declarations. By doing it I explicitly show which values are open for modifications and which are not. 
+
+## 08.10.2022
+
+Next changes to main.c introduced the concept of dynamic memory allocation. New header file stdlib.h with functions malloc, calloc and realloc was used to reserve heap memory. Together with them the proper use of the function free() was necessary in order to avoid memory leaks. Valgrind was the tool that checked program against such leaks. What is more, one has to take into consideration the scenario when void pointer that returns address in malloc, calloc and realloc functions is of NULL type. This happens when there is no available memory in heap. In such case the program is terminated and returns error code ENOMEM. 
+
+### scanf
+
+This time program starts from requesting input data from user. In order to do this the scanf () function was introduced. In this version of the program user is asked to input integer numbers. If function scanf() is unable to retrieve integer values from input, the program terminates and prints error message on the console.
+
+### pointer to pointer
+
+In this modification of the program, the concept of pointers is further widened and 'pointer to pointer' pointers were introduced. This was necessary because I wanted to assign address given by malloc function to my original pointer from main function instead of creating a copy of this pointer.
+
+###error codes
+
+I used new header file errno.h is order to use different error codes, f.e. one that indicates 'not enough memory' in heap.
+
+### if0 endif
+
+In order to indicate, which lines of the code should be ignored by the preprocessor, I used #if 0 and #endif comments.
+
