@@ -103,7 +103,7 @@ return;
 
 }
 
-
+#if 0
 int input (int* lower, int* upper, int* step){
 
 	int c;
@@ -116,7 +116,7 @@ int input (int* lower, int* upper, int* step){
 {	printf("Wrong input data...\n");
 
 	return 1;
-}
+}i
 
 		
 	printf("Give the upper end of the range: \n");
@@ -130,12 +130,56 @@ int input (int* lower, int* upper, int* step){
 
 return 0;
 }
+#endif
+int input(int *lower, int *upper, int *step) {//this time we read input data from the test.txt file)
 
+
+FILE *fp = NULL;
+
+fp = fopen("test.txt","r");
+
+if (fp ==NULL) {           //we're checking if the file exists and can be read
+
+	printf("error: no file");
+	exit(1);
+
+}
+
+
+int c = fscanf (fp, "%d", lower);//assigning first integer value from the test.txt file to 'lower' variable
+	if (c != 1) 
+
+{	printf("Wrong input data...\n");
+
+	return 1;
+}
+
+int d = fscanf(fp, "%d", upper);
+
+	if (d != 1) 
+
+{	printf("Wrong input data...\n");
+
+	return 1;
+}
+
+int e = fscanf(fp, "%d", step);
+
+	if (e != 1) 
+
+{	printf("Wrong input data...\n");
+
+	return 1;
+
+fclose(fp);
+
+return 0;
+}
 #define A 2
 #define B 6
 
 int main (){
-//declaring two arrays x and y of size 100 per each
+
 
 int *x;
 int lower;
@@ -160,7 +204,7 @@ printf("Wrong values - exiting...\n");
 return 0;
 
 }
-#if 0   // - command that makes the preprocessor ignore every line until endif
+#if 0   
 printf("lower:%d\n",lower);
 printf("upper:%d\n",upper);
 printf("step:%d\n", step);
