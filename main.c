@@ -32,23 +32,6 @@ int init_x (int lower, int upper, int step,int** x) {
 	int count;
 	
 	count = 0; 
-#if 0
-/* 1st version  */
-	*x= malloc(10*sizeof(int));
-
-	for (i=lower; i<=upper; i+=step) {//or i=i+step
-	
-//	(*x)[count]=i;
-	*((*x)+i)=i;
-	printf("%d\n",(*x)[count]);
-
-
-	
-        count++;
-}
-
-#endif
-
 int *tmp = malloc(10 * sizeof(int));
 //important assign x before we increment tmp
 *x= tmp;
@@ -61,7 +44,6 @@ int *tmp = malloc(10 * sizeof(int));
 	if (count>=10){
 
 	tmp = realloc (*x, ((count+1)*sizeof(int)));
-        tmp=NULL;
 if (tmp == NULL){
 	printf("Not enough memory - exiting...");
 
@@ -103,57 +85,30 @@ return;
 
 }
 
-#if 0
-int input (int* lower, int* upper, int* step){
+int input(int *lower, int *upper, int *step, FILE *fp) {
 
-	int c;
 
+
+if (fp ==NULL) {      //if file doesn't exist or user has not entered any file name then we take data from standard input
+fp = stdin;
+}
+
+
+//fscanf(stdin, "%d",lower); == scanf("%d", lower);
+if (fp == stdin)
 	printf("Give the lower end of the range: \n");
-	c = scanf("%d",lower);
-	
+
+int c = fscanf (fp, "%d", lower);
+
 	if (c != 1) 
 
 {	printf("Wrong input data...\n");
 
 	return 1;
-}i
+}
 
-		
+if (fp == stdin)
 	printf("Give the upper end of the range: \n");
-
-	scanf("%d", upper);
-
-	printf("Give the value of the step: \n");
-
-	scanf("%d", step);
-
-
-return 0;
-}
-#endif
-int input(int *lower, int *upper, int *step) {//this time we read input data from the test.txt file)
-
-
-FILE *fp = NULL;
-
-fp = fopen("test.txt","r");
-
-if (fp ==NULL) {           //we're checking if the file exists and can be read
-
-	printf("error: no file");
-	exit(1);
-
-}
-
-
-int c = fscanf (fp, "%d", lower);//assigning first integer value from the test.txt file to 'lower' variable
-	if (c != 1) 
-
-{	printf("Wrong input data...\n");
-
-	return 1;
-}
-
 int d = fscanf(fp, "%d", upper);
 
 	if (d != 1) 
@@ -163,6 +118,8 @@ int d = fscanf(fp, "%d", upper);
 	return 1;
 }
 
+if (fp == stdin)
+	printf("Give the value of the step: \n");
 int e = fscanf(fp, "%d", step);
 
 	if (e != 1) 
@@ -170,15 +127,15 @@ int e = fscanf(fp, "%d", step);
 {	printf("Wrong input data...\n");
 
 	return 1;
+}
 
-fclose(fp);
 
 return 0;
 }
 #define A 2
 #define B 6
 
-int main (){
+int main (int argc, char* argv[]){ //we introduce argc (agrument count) and argv (argument vector)
 
 
 int *x;
@@ -189,14 +146,20 @@ int input_res;
 
 	int n_elem;
 	
-	
-input_res = input(&lower,&upper,&step);
-
-if (input_res == 1){
-
-return 0;
+if (argc==2){	//if argc = 2 means that user has input the name of the file which is assigned as argv[1]
+FILE * fp= fopen(argv[1], "r");
+if (fp ==NULL){ //this happens when file doesn't exist
+printf("invalid file name or path. \n reading from input...\n");
 
 }
+input_res = input(&lower,&upper,&step, fp);
+if (fp) //is equivalent to: fp != NULL. If file pointer fp exists (is not NULL then we close it)
+fclose(fp);
+}
+if (argc ==1){
+input_res = input(&lower,&upper,&step,NULL );
+}
+
 
 if (lower>upper || step>(upper - lower)){
 
@@ -204,12 +167,7 @@ printf("Wrong values - exiting...\n");
 return 0;
 
 }
-#if 0   
-printf("lower:%d\n",lower);
-printf("upper:%d\n",upper);
-printf("step:%d\n", step);
-#endif
-	n_elem = init_x (lower,upper,step,&x);
+n_elem = init_x (lower,upper,step,&x);
 
 	if (n_elem ==-ENOMEM){
 	printf("exiting...");	
@@ -217,7 +175,7 @@ printf("step:%d\n", step);
 
 }
 int *y = (int*)malloc(10*sizeof(int));
-if (y==NULL)             //if y is null pointer AKA there's not enough space for y on the heap, then free(x) and exit as we need space for both array x and y
+if (y==NULL)             
 {
 free(x);
 printf("Not sufficient memory.exiting\n");

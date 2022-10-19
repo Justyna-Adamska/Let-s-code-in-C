@@ -45,3 +45,7 @@ In order to indicate, which lines of the code should be ignored by the preproces
 ## 16.10.2022
 
 The concept of file handling is implemented. Input data is now taken from the external test.txt file. In order to do this a new type of pointer appears: FILE pointer. It is pointing to an external file after calling fopen() function. File can be opened in the 'read', 'write' or'append' mode. Additionally some error handling is specified when file to be read from does not exist. It is very important to use fclose() function to free system resources when data is no longer needed.
+
+##19.10.2022
+
+Argument counter Argc and argument vector argv[] appear in the code. First one indicates how many arguments are specified in the command line. Argv is the pointer to the array of strings with arguments corresponding to the next program parametersin the command line. Error handling covers the scenarios when user does not give any file to read from or file does not exist. In such case program is taking data from standard input.
